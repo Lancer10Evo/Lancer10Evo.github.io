@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KINETIK MINE — Магазин привилегий</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: radial-gradient(circle at top, #1a103c 0%, #090614 100%);
+    color: #f1f5f9;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+  header {
+    text-align: center;
+    padding: 45px 20px 30px;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.25);
+  }
+  .logo {
+    font-size: 2.6rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #8b5cf6, #ec4899, #38bdf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .ip-badge {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 10px 22px;
+    background: rgba(139, 92, 246, 0.15);
+    border: 1px solid rgba(139, 92, 246, 0.45);
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+  }
+  .ip-badge:hover {
+    background: rgba(139, 92, 246, 0.3);
+    transform: translateY(-2px);
+  }
+  .container {
+    max-width: 1100px;
+    margin: 35px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 28px;
+  }
+  @media (max-width: 860px) {
+    .container { grid-template-columns: 1fr; }
+  }
+  .card-panel {
+    background: rgba(19, 14, 38, 0.88);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 18px;
+    padding: 26px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+    height: fit-content;
+  }
+  h2 {
+    font-size: 1.35rem;
+    margin-bottom: 18px;
+    color: #e2e8f0;
+  }
+  label {
+    display: block;
+    font-size: 0.9rem;
+    color: #94a3b8;
+    margin: 14px 0 6px;
+  }
+  input, select {
+    width: 100%;
+    padding: 13px 15px;
+    background: #0d091a;
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+  }
+  input:focus, select:focus {
+    border-color: #ec4899;
+  }
+  .buy-btn {
+    width: 100%;
+    margin-top: 22px;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #7c3aed, #db2777);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .buy-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(219, 39, 119, 0.45);
+  }
+  .priv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+    gap: 14px;
+  }
+  .priv-item {
+    background: rgba(25, 19, 48, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .priv-item:hover, .priv-item.active {
+    border-color: #a855f7;
+    background: rgba(139, 92, 246, 0.16);
+    transform: translateY(-3px);
+  }
+  .priv-title {
+    font-weight: 800;
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+  }
+  .priv-price {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #facc15;
+    margin-bottom: 8px;
+  }
+  .priv-desc {
+    font-size: 0.83rem;
+    color: #cbd5e1;
+    line-height: 1.4;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo" id="serverTitle">KINETIK MINE</div>
+  <p style="color:#94a3b8; margin-top:6px;">Официальный магазин привилегий сервера</p>
+  <div class="ip-badge" id="ipBadge" onclick="copyIp()">
+    🎮 IP Сервера: play.kinetik-mc.ru (Нажми, чтобы скопировать)
+  </div>
+</header>
+
+<div class="container">
+  <div class="card-panel">
+    <h2>⚡ Покупка привилегии</h2>
+    <form method="POST" action="https://yoomoney.ru/quickpay/confirm.xml" onsubmit="return preparePayment()">
+      <input type="hidden" name="receiver" id="ymWallet" value="">
+      <input type="hidden" name="quickpay-form" value="shop">
+      <input type="hidden" name="targets" id="ymTargets" value="">
+      <input type="hidden" name="label" id="ymLabel" value="">
+      <input type="hidden" name="sum" id="ymSum" value="29">
+
+      <label>Ваш игровой никнейм на сервере:</label>
+      <input type="text" id="playerNick" placeholder="Например: KINET1C" required pattern="[a-zA-Z0-9_]{3,16}">
+
+      <label>Выберите привилегию:</label>
+      <select id="roleSelect" onchange="updateSelection()"></select>
+
+      <label>Способ оплаты:</label>
+      <select name="paymentType">
+        <option value="AC">💳 Банковская карта (МИР / Visa / MC)</option>
+        <option value="PC">🟣 Кошелёк ЮMoney</option>
+      </select>
+
+      <button type="submit" class="buy-btn" id="submitBtn">Оплатить 29 ₽</button>
+    </form>
+    <p style="font-size:0.8rem; color:#64748b; margin-top:14px; text-align:center;">
+      Привилегия выдаётся автоматически сразу после подтверждения оплаты!
+    </p>
+  </div>
+
+  <div>
+    <h2 style="margin-bottom: 14px;">💎 Доступные привилегии (Нажми на карточку)</h2>
+    <div class="priv-grid" id="privGrid"></div>
+  </div>
+</div>
+
+<script>
+// =========================================================================
+// ⚙️ НАСТРОЙКИ (Впиши свой номер кошелька ЮMoney и IP сервера)
+// =========================================================================
+const YOOMONEY_WALLET = "410010000000000"; // <-- ВПИШИ СЮДА НОМЕР КОШЕЛЬКА ЮMONEY
+const SERVER_IP       = "play.kinetik-mc.ru";
+
+const PRIVILEGES = [
+  { code: "prime",       name: "ПРАЙМ",          price: 29,   color: "#38bdf8", desc: "/fly, /feed, /hat, /workbench, /ec, 5 слотов на /ah" },
+  { code: "architect",   name: "АРХИТЕКТОР",     price: 59,   color: "#0284c7", desc: "Режим /gm 1 (Креатив), /heal, /clear, 7 слотов на /ah" },
+  { code: "warden",      name: "СТРАЖ",          price: 99,   color: "#6366f1", desc: "/vanish, /tp, /invsee, /kick, /tempmute, /repair" },
+  { code: "punisher",    name: "КАРАТЕЛЬ",       price: 149,  color: "#ef4444", desc: "Бессмертие /god, /tempban, /unmute, /repair all, цветной /nick" },
+  { code: "titan",       name: "ТИТАН",          price: 199,  color: "#a855f7", desc: "/speed, /anvil, /tpahere, /jump, /top, сидеть на игроках" },
+  { code: "inquisitor",  name: "ИНКВИЗИТОР",     price: 269,  color: "#dc2626", desc: "/tphere, проверка гриферов /co inspect, /whois, /banlist" },
+  { code: "maker",       name: "ТВОРЕЦ",         price: 349,  color: "#f59e0b", desc: "Флаги региона WorldGuard (PvP, приветствие), /lightning, /fireball" },
+  { code: "magnate",     name: "МАГНАТ",         price: 449,  color: "#eab308", desc: "Объявление /broadcast, /enchant, /exp, /more, вход на полный сервер" },
+  { code: "sovereign",   name: "СУВЕРЕН",        price: 590,  color: "#f87171", desc: "/ban навсегда, /unban, установка варпов /setwarp, смена спавнеров" },
+  { code: "root",        name: "⚡ ROOT ⚡",       price: 790,  color: "#22d3ee", desc: "Доступ к WorldEdit (//wand, //set, //replace, //walls, //copy), /kill" },
+  { code: "monarch",     name: "МОНАРХ",         price: 990,  color: "#fbbf24", desc: "Откат гриферов /co rollback, //sphere, //cyl, /time, иммунитет к муту" },
+  { code: "boss",        name: "ХОЗЯИН СЕРВЕРА", price: 1290, color: "#b91c1c", desc: "/gm 3, изменение чужих инвентарей и эндер-сундуков, иммунитет к бану" },
+  { code: "overseer",    name: "НАДЗИРАТЕЛЬ",    price: 1590, color: "#4ade80", desc: "Прослушка ЛС /socialspy, уведомления всех наказаний, статус в TAB" },
+  { code: "kinetikplus", name: "✦ KINETIK+ ✦",   price: 1990, color: "#e879f9", desc: "Фирменный RGB-префикс проекта, /kittycannon, /beezooka, 40 лотов /ah" },
+  { code: "directorate", name: "❖ ДИРЕКЦИЯ ❖",   price: 2490, color: "#10b981", desc: "Полный CoreProtect, управление лотами /ah и аренами BedWars" },
+  { code: "arbiter",     name: "⚜ ВЕРШИТЕЛЬ ⚜",  price: 3490, color: "#facc15", desc: "Полный WorldEdit без лимитов, бан по IP, все киты сервера, 50 лотов /ah" },
+  { code: "patron",      name: "💎 МЕЦЕНАТ 💎",   price: 4990, color: "#06b6d4", desc: "ФИНАЛЬНЫЙ СТАТУС: Все возможности доната и максимальный приоритет!" }
+];
+
+document.getElementById('ymWallet').value = YOOMONEY_WALLET;
+document.getElementById('ipBadge').innerText = "🎮 IP Сервера: " + SERVER_IP + " (Нажми, чтобы скопировать)";
+
+const selectEl = document.getElementById('roleSelect');
+const gridEl   = document.getElementById('privGrid');
+
+PRIVILEGES.forEach(p => {
+  const opt = document.createElement('option');
+  opt.value = p.code;
+  opt.dataset.price = p.price;
+  opt.dataset.name = p.name;
+  opt.innerText = `${p.name} — ${p.price} ₽`;
+  selectEl.appendChild(opt);
+
+  const card = document.createElement('div');
+  card.className = 'priv-item';
+  card.id = 'card-' + p.code;
+  card.onclick = () => { selectEl.value = p.code; updateSelection(); };
+  card.innerHTML = `
+    <div class="priv-title" style="color:${p.color}">${p.name}</div>
+    <div class="priv-price">${p.price} ₽</div>
+    <div class="priv-desc">${p.desc}</div>
+  `;
+  gridEl.appendChild(card);
+});
+
+function updateSelection() {
+  const code = selectEl.value;
+  const opt = selectEl.options[selectEl.selectedIndex];
+  const price = opt.dataset.price;
+
+  document.getElementById('ymSum').value = price;
+  document.getElementById('submitBtn').innerText = `Оплатить ${price} ₽`;
+
+  document.querySelectorAll('.priv-item').forEach(el => el.classList.remove('active'));
+  const activeCard = document.getElementById('card-' + code);
+  if (activeCard) activeCard.classList.add('active');
+}
+
+function preparePayment() {
+  const nick = document.getElementById('playerNick').value.trim();
+  const opt = selectEl.options[selectEl.selectedIndex];
+  if (!nick) return false;
+
+  document.getElementById('ymLabel').value = `${nick}:${selectEl.value}`;
+  document.getElementById('ymTargets').value = `Привилегия [${opt.dataset.name}] для игрока ${nick}`;
+  return true;
+}
+
+function copyIp() {
+  navigator.clipboard.writeText(SERVER_IP);
+  document.getElementById('ipBadge').innerText = "✅ IP Скопирован: " + SERVER_IP;
+}
+
+updateSelection();
+</script>
+</body>
+</html>
